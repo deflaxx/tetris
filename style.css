@@ -1,8 +1,205 @@
-canvas {
+#canvas-container {
+    display: flex;
+    width: 40%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: auto;
+    padding-left: 0;
+    padding-right: 0;
+    transition: 300ms;
+    
+}
+
+#tetris-canvas {
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    margin-bottom: auto;
+    
+}
+
+#right{
+    padding-left: 0;
+    padding-right: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    color: white;
+    transition: 500ms;
+}
+
+#right-np {
+    width: 120px;
+    height: 270px;
+
+}
+
+body {
+	background-color:#E1E1E1;
+	font-family: ubuntu, arial;
+	margin:0px; 
+}
+#play-button,#pause-button{
+    align-items: center;
+    background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+    border: 0;
+    border-radius: 8px;
+    box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+    box-sizing: border-box;
+    color: #FFFFFF;
+    display: flex;
+    font-family: ubuntu, arial;
+    justify-content: center;
+    line-height: 1em;
+    max-width: 100%;
+    min-width: 6rem;
+    padding: 3px;
+    text-decoration: none;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    white-space: nowrap;
+    cursor: pointer;
+}
+#play-button:active,#pause-button:active,#play-button:hover,#pause-button:hover{
+    outline:0;
+}
+#play-button span,#pause-button span {
+    background-color: black;
+    font-size: 1em;
+    padding: 16px 24px;
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
+    transition: 300ms;
+  }
+  
+  #play-button span:hover,#pause-button span:hover {
+    background: none;
+  }
+
+#title {
+    font-family: 'Hanalei Fill', cursive;
+    position: relative;
+    font-size: 50px;
+    text-align: center;
+    margin: 20px;
+    color: #c6e2ff;
+    text-shadow:
+      0 0 6px rgba(202,228,225,0.92),
+      0 0 30px rgba(202,228,225,0.34),
+      0 0 12px rgba(30,132,242,0.52),
+      0 0 21px rgba(30,132,242,0.92),
+      0 0 34px rgba(30,132,242,0.78),
+      0 0 54px rgba(30,132,242,0.92);
+  }
+
+body{
+    background-image: url("https://wallpaper.dog/large/20468918.jpg");
+}
+
+#left, #right-np{
+	position: relative;
+	background: linear-gradient(0deg, #000, #272727);
+}
+
+#left:before, #left:after, #right-np:before, #right-np:after{
+	content: '';
+	position: absolute;
+	left: -2px;
+	top: -2px;
+	background: linear-gradient(45deg, #fb0094, #0000ff, #00ff00,#ffff00, #ff0000, #fb0094, 
+		#0000ff, #00ff00,#ffff00, #ff0000);
+	background-size: 400%;
+	width: calc(100% + 4px);
+	height: calc(100% + 4px);
+	z-index: -1;
+	animation: steam 20s linear infinite;
+}
+
+@keyframes steam {
+	0% {
+		background-position: 0 0;
+	}
+	50% {
+		background-position: 400% 0;
+	}
+	100% {
+		background-position: 0 0;
+	}
+}
+
+
+#left:after, #right-np:after {
+	filter: blur(50px);
+}
+
+
+@media screen and (max-width: 1200px) {
+    #right {
+        margin-left: 1em;
+        font-size: 0.8em;
+    }
+    #title {
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 50px;
+    }
+    #play-button,#pause-button{
+        font-size: 0.5em;
+    }
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#sniffa {
     position: absolute;
-    top: 45%;
-    left: 50%;
-    width: 640px;
-    height: 640px;
-    margin: -320px 0 0 -320px;
+    top:10rem;
+    left:1rem;
+    height: 10em;
+    
 }

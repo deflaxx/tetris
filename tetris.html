@@ -2,12 +2,39 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Tétris JavaScript</title>
+	<title>Tetris JavaScript</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Hanalei+Fill&display=swap" rel="stylesheet"> 
 	<link href="img/icone.png" rel="icon" type="image/x-icon" />
 	<link rel="stylesheet" type="text/css" href="style.css">
+	<script type="text/javascript" src="./grid.js"></script>
+	<script type="text/javascript" src="./tetrimino.js"></script>
+	<script type="text/javascript" src="./block.js"></script>
 </head>
 <body>
-    <canvas></canvas>
+	<h1 id="title">Tetris</h1>
+	<img id="sniffa">
+	<div id="canvas-container">
+		<div id="left">
+			<canvas id="tetris-canvas" width="300" height="600"></canvas>
+		</div>
+		<div id="right">
+			<div id="right-np">
+			<canvas id="next-piece" width="120" height="270"></canvas>
+			</div>
+			<h2 id="score">Score : 0</h2>
+			<h2 id="best-score"> Meilleur Score : 0</h2>
+			<h2 id="lines-count">Lines : 0</h2>
+			<button id="play-button" role="button"><span class="text">PLAY</span></button>
+			<button id="pause-button" role="button"><span class="text">PAUSE</span></button>
+
+		</div>
+		
+
+		
+	</div>
+	
 </body>
-<script type="text/javascript" src="./main.js"></script>
+<script type="text/javascript" src="./script.js"></script>
 </html>
