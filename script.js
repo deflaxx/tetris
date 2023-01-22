@@ -9,6 +9,7 @@ class Model {
         this.lines = 0;
         this.score = 0;
         this.bestScore = 0;
+        this.refreshing = true;
     }
 
     bindDisplayGame(callback){
@@ -71,11 +72,16 @@ class Model {
     }
 
     moveToBottom(){
-        while (this.isLegalMove("ArrowDown")){
+        while (this.isLegalMove("ArrowDown", false)){
             this.piece.moveDown();
             this.score += 1;
         }
-        this.goDown();
+        if (!this.isGameOver(false)) {
+            this.getGrid();
+            this.completeRow();
+        } else {
+            this.stopFalling();
+        }
     }
 
     newGame(){
@@ -103,7 +109,10 @@ class Model {
         }
     }
 
-    isLegalMove(key){
+    isLegalMove(key, refresh = true){
+        if (!this.refreshing) {
+            return false;
+        }
         for (let i = 0; i < this.piece.shape.length; i++) {
             for (let j = 0; j < this.piece.shape[i].length; j++) {
                 if(this.piece.shape[i][j].color != "rgba(0,0,0,0)"){
@@ -125,12 +134,20 @@ class Model {
                                         if(this.piece.shape[i][j].color != "rgba(0,0,0,0)"){
                                             this.grid.matrix[(this.piece.y+this.piece.shape[i][j].y)/30][(this.piece.x+this.piece.shape[i][j].x)/30].color = this.piece.shape[i][j].color;
                                             this.grid.matrix[(this.piece.y+this.piece.shape[i][j].y)/30][(this.piece.x+this.piece.shape[i][j].x)/30].fixed = 1;
-                                            this.completeRow();
+                                            if (refresh) {
+                                                this.completeRow();
+                                            } 
                                         }
                                     }
                                 }
                                 if (!this.isGameOver()){
-                                    this.changePiece();
+                                    if (!refresh) {
+                                        setTimeout(() => {
+                                            this.changePiece();
+                                        }, 100);
+                                    } else {
+                                        this.changePiece();
+                                    }
                                 } else {
                                     this.stopFalling();
                                 }
@@ -192,40 +209,41 @@ class Model {
     }
 
     completeRow(){
+        let count = 0;
         for (let i = 0; i < 20; i++) {
-            let count = 0;
+            let row = true;
             for (let j = 0; j < 10; j++) {
-                if(this.grid.matrix[i][j].fixed == 1){
-                    count++;
+                if(this.grid.matrix[i][j].fixed == 0){
+                    row = false;
                 }
             }
-            if(count == 10){
+            if (row) {
+                this.refreshing = false;
+                count++;
                 this.destroyRow(i);
-                this.pause(false);
-                setTimeout(() => {  
-                    for (let k = i; k > 0; k--) {
-                        for (let l = 0; l < 10; l++) {
-                            this.grid.matrix[k][l].color = this.grid.matrix[k-1][l].color;
-                            this.grid.matrix[k][l].fixed = this.grid.matrix[k-1][l].fixed;
-                        }
+                for (let k = i; k > 0; k--) {
+                    for (let j = 0; j < 10; j++) {
+                         this.grid.matrix[k][j].fixed = this.grid.matrix[k-1][j].fixed;
+                        this.grid.matrix[k][j].color = this.grid.matrix[k-1][j].color;
                     }
-                    for (let m = 0; m < 10; m++) {
-                        this.grid.matrix[0][m].color = "white";
-                        this.grid.matrix[0][m].fixed = 0;
-                    }
-                    this.lines += 1;
-                    this.score += 100;
-                    this.interval -= 50;
-                    this.pause(false);
-                    this.setInterval(this.interval); }, 500);
+                }
+                setTimeout(() => { this.refreshing = true; }, 500);
             }
         }
+        if (count > 0) {
+            this.score += count*100;
+            this.lines += count;
+            this.displayScore(this.lines, this.score, this.bestScore);
+        }
     }
-
-    isGameOver(){
+    
+    isGameOver(display = true){
         for (let i = 0; i < 10; i++) {
             if(this.grid.matrix[2][i].fixed == 1){
-                this.displayGameOver();
+                if (display) {
+                    this.getGrid();
+                    this.displayGameOver();  
+                }          
                 this.bestScore = Math.max(this.bestScore, this.score);
                 return true;
             }
@@ -286,7 +304,7 @@ class View {
     }
     
     destroyRow(row){
-        this.ctx1.fillStyle = "rose";
+        this.ctx1.fillStyle = "rgb(207,170,232)";
         this.ctx1.fillRect(0, row*30, 300, 30);
     }
 
@@ -364,8 +382,8 @@ class Controller {
         this.view.displayPause();
     }
 
-    bindDestroyRow(row){
-        this.view.destroyRow(row);
+    bindDestroyRow(row, color){
+        this.view.destroyRow(row, color);
     }
 
     bindGetGrid(){
@@ -392,13 +410,13 @@ class Controller {
                     case "ArrowUp":
                         this.model.rotate();
                         break;
-                    }
                 }
                 switch (event.code) {
                     case "Space":
                         this.model.moveToBottom();
                         break;
                 }
+            }
             switch (event.key) {
                 case "Enter":
                     this.model.newGame();

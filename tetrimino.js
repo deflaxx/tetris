@@ -17,7 +17,6 @@ class Tetrimino {
             Z: [[new Block("red", 0, 0), new Block("red", 30, 0), new Block("rgba(0,0,0,0)", 60, 0)], 
                 [new Block("rgba(0,0,0,0)", 0, 30), new Block("red", 30, 30), new Block("red", 60, 30)]]
         });
-
         this.shape = this.randomShape();
     }
 
